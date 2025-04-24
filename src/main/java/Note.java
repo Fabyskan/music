@@ -13,6 +13,10 @@ public class Note {
                 this.name = name;
                 this.value = value;
     }
+    /*
+    * Standardkonstruktor für Note der die Enumtypen annimmt
+    *
+    * */
 
     public Note(final String name, final String value) {
         this(
@@ -20,27 +24,55 @@ public class Note {
             NoteValue.fromAbbreviation(value)
         );
     }
+    /*
+    Konstruktor, der Strings annimmt und mit den parse Methoden dann den oberen Konstruktor aufruft
+     */
 
     public void getNoteValue(Note note) {
         System.out.println("Die Note hat den Wert: "+note.value);
     }
 
-    public void getNoteName(Note note) {
-        System.out.println("Die Note hat dne Namen: "+note.name);
+    public void getNoteName() {
+        System.out.println("Die Note hat dne Namen: "+this.name);
     }
 
-    public void getNextNote(Note note) {
-        System.out.println("Die nächste Note ist: "+note.nextNote);
+    public Note getNextNote() {
+        System.out.println("Die nächste Note ist: "+this.nextNote);
+        return this.nextNote;
     }
+
+    public void setNextNote(Note note) {
+        nextNote = note;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Note other = (Note) obj;
+
+        return this.value == other.value &&
+                this.name.equals(other.name);
+    }
+    /*
+    * Vergleicht zwei Noten über ihre Werte und Namen. Zuerst die values, weil die schneller geprüft sind.
+    * */
+
+    public static String toString(Note note) {
+        String value = NoteValue.getAbbreviation(note.value);
+        String name = NoteName.getAbbreviation(note.name);
+        return name + ":" + value;
+    }
+    /*
+    * Nutzt die getAbbreviation Methoden, um die Notenbestandteile in Strings umzuwandeln und konkateniert sie
+    * */
+
+    public double getPitch(Note note) {
+        double x = note.name.ordinal();
+        double pitch = 440 * Math.pow(2,x/12);
+        return pitch;
+    }
+    /*
+    * nimmt sich über die ordinal Methode die Zahl, die hinter der enum steckt und
+    * */
 }
 
-/*
-                * if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Note name shall not be null or empty!");
-        }
-        if (value == null || value.isEmpty()) {
-            throw new IllegalArgumentException("Note value shall not be null or empty!");
-        }
-        NoteName parsedName = NoteName.fromAbbreviation(name);
-        NoteValue parsedValue = NoteValue.fromAbbreviation(value);
-*/
