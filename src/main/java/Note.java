@@ -66,8 +66,8 @@ public class Note {
     * Nutzt die getAbbreviation Methoden, um die Notenbestandteile in Strings umzuwandeln und konkateniert sie
     * */
 
-    public double getPitch(Note note) {
-        double x = note.name.ordinal();
+    public double getPitch() {
+        double x = this.name.ordinal();
         double pitch = 440 * Math.pow(2,x/12);
         return pitch;
     }
