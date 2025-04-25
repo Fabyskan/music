@@ -14,11 +14,21 @@ public enum NoteName {
 
     private final String abbreviation;
 
-    private NoteName(String abbreviation) {
+    /**
+     * Konstruktor für Notenname
+     * @param abbreviation Gibt die Abkürzung aus
+     */
+    NoteName(String abbreviation) {
         this.abbreviation = abbreviation;
     }
 
-    public static NoteName fromAbbreviation(String abbreviation) {
+
+    /**
+     * Parse Funktion um Strings in Notennamen umzuwandeln
+     * @param abbreviation String (C:W)
+     * @return Notenwert
+     */
+    public static NoteName parse(String abbreviation) {
         NoteName name = switch (abbreviation) {
             case "A": yield A;
             case "A#": yield A_SHARP;
@@ -37,8 +47,12 @@ public enum NoteName {
         return name;
     }
 
-    public static String getAbbreviation(NoteName toAbbreviate) {
-        String myString = switch (toAbbreviate) {
+    /**
+     * Getter für die Abkürzungen
+     * @return Gibt die Abkürzung aus
+     */
+    public String getAbbreviation() {
+        /*String myString = switch (toAbbreviate) {
             case A: yield "A";
             case A_SHARP: yield "A#";
             case B: yield "B";
@@ -53,6 +67,7 @@ public enum NoteName {
             case G_SHARP: yield "G#";
             default: throw new IllegalArgumentException("Unknown note: " + toAbbreviate);
         };
-        return myString;
+        return myString;*/
+        return abbreviation;
     }
 }

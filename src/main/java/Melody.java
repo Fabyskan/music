@@ -1,28 +1,64 @@
 public class Melody {
     private Note firstNote;
 
+    /**
+     * Konstruktor für die Erste Note
+     * @param firstNote
+     */
     public Melody(Note firstNote) {
-        if (firstNote == null) {
+       /* if (firstNote == null) {
             throw new IllegalArgumentException("firstNote shall not be null!");
-        }
+        } */ // verursacht einen diabolischen Fehler
         this.firstNote = firstNote;
     }
 
-    public void getFirstNote(Note firstNote) {
-        System.out.println("First Note: " + firstNote);
-    }
+    /**
+     * Getter für FirstNote
+     * @return Erste Note
+     */
 
-    public boolean contains(Note firstNote, Note nextNote) {
+    public Note getFirstNote() {
+        return firstNote;
+    }
+    // Getter für FirstNote
+
+    /**
+     * Getter für die letzte Note der Melodie
+     * @return Letzte Note
+     */
+    public Note getLastNote() {
+        if (firstNote == null) {
+            return null;
+        }
+        Note current = firstNote;
+        while (current.getNextNote() != null) {
+            current = current.getNextNote();
+        }
+        return current;
+    }
+    // Getter für die letzte Note am Ende der Liste
+
+    /**
+     * Prüft ob Note schon enthalten ist
+     * @param nextNote Zu prüfende Note
+     * @return Wahr oder Falsch
+     */
+    public boolean contains(Note nextNote) {
         Note current = firstNote;
         while (current != null) {
-            if (current.equals(nextNote)) {
-                return true; // Referenz gefunden
+            if (current == nextNote) {
+                return true;
             }
             current = current.getNextNote();
         }
         return false;
     }
+    // Geht die Liste durch und prüft ob die Objektreferenz gleich ist, falls nicht geht er bis ans Ende und gibt dann false zurück
 
+    /**
+     * Fügt eine Note zur Melodie hinzu
+     * @param note Die zu hinzufügende Note
+     */
     public void addNote(Note note) {
         Note current = this.firstNote;
         if (current == null) {
@@ -30,31 +66,75 @@ public class Melody {
             return;
         }
         while (current.getNextNote() != null) {
-            if (current == current.getNextNote()) {
+            if (contains(note)) {
                 throw new IllegalArgumentException("Note already exists!");
             }
-            current.setNextNote(note);
-        }
-        note.setNextNote(current);
-    }
-
-    public void replaceNote(Note newNote, int index) {
-        if (index == 0) {
-            throw new IllegalArgumentException("index shall not be 0!");
-        }
-        Note current = this.firstNote;
-        if (contains(current, newNote)) {
-            throw new IllegalArgumentException("Note already exists!");
-        }
-        for (int i = 0; i < index; i++) {
             current = current.getNextNote();
         }
-        current.setNextNote(newNote);
+        current.setNextNote(note);
     }
 
+    /**
+     * Ersetzt eine Note
+     * @param newNote Neue einzusetzende Note
+     * @param index Stelle an der die Note eingesetzt werden soll
+     */
+    public void replaceNote(Note newNote, int index) {
+        if (index < 0) {
+            throw new IndexOutOfBoundsException("Index out of bounds!");
+        }
+        if (this.contains(newNote)) {
+            throw new IllegalArgumentException("Note already exists!");
+        }
+        if (index == 0) {
+            newNote.setNextNote(firstNote.getNextNote());
+            firstNote = newNote;
+            return;
+        }
 
-    public String toString() {
         Note current = this.firstNote;
+        int i = 0;
+        while (current != null && i < index -1) {
+            current = current.getNextNote();
+            i++;
+        }
+        if (current == null || current.getNextNote() == null) {
+            throw new IndexOutOfBoundsException("Index out of bounds!");
+        }
+
+        newNote.setNextNote(current.getNextNote().getNextNote());
+        current.setNextNote(newNote);
+
+        /*for (int i = 0; i < index; i++) {
+            current = current.getNextNote();
+        }
+        current.setNextNote(newNote);*/
+    }
+
+    /**
+     * Baut die Ausgabe zusammen
+     * @return Gibt die Melodie als String aus
+     */
+    @Override
+    public String toString() {
+        if (firstNote == null) {
+            return "";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        Note current = this.firstNote;
+
+        while (current != null) {
+            sb.append(current.toString());
+            if (current.getNextNote() != null) {
+                sb.append(",");
+            }
+            current = current.getNextNote();
+        }
+        return sb.toString();
+
+
+        /*Note current = this.firstNote;
         String noteString = "";
         if (firstNote == null) {
             return "";
@@ -66,14 +146,18 @@ public class Melody {
             noteString = noteString + "," + Note.toString(current);
             current = current.getNextNote();
         }
-        return noteString;
+        return noteString;*/
     }
 
+    /**
+     * Prüft ob zwei Noten gleich sind
+     * @param obj Zu prüfende Note
+     * @return Wahr oder Falsch
+     */
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true; // Wenn beide Objekte gleich sind
-        if (obj == null || getClass() != obj.getClass()) return false; // Null oder falscher Typ
-
-        Melody other = (Melody) obj; // Casten des Objekts auf die passende Klasse
+        if (!(obj instanceof Melody other)) return false;
 
         Note currentThis = this.firstNote;
         Note currentOther = other.firstNote;

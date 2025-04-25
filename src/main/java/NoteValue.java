@@ -5,11 +5,20 @@ public enum NoteValue {
 
     private final String abbreviation;
 
+    /**
+     * Konstruktor für die Notenwerte
+     * @param abbreviation Abkürzung als String
+     */
     NoteValue(String abbreviation) {
         this.abbreviation = abbreviation;
     }
 
-    public static NoteValue fromAbbreviation(String abbreviation) {
+    /**
+     * Parse Funktion um Strings in Notenwerte umzuwandeln
+     * @param abbreviation Abkürzung für den Notenwert
+     * @return Notenwert
+     */
+    public static NoteValue parse(String abbreviation) {
         NoteValue value = switch (abbreviation) {
             case "W": yield WHOLE;
             case "H": yield HALF;
@@ -19,14 +28,19 @@ public enum NoteValue {
         return value;
     }
 
-    public static String getAbbreviation(NoteValue toAbbreviate) {
-        String myString = switch (toAbbreviate) {
+    /**
+     * Getter für die Abkürzung
+     * @return Gibt die Abkürzung aus
+     */
+    public String getAbbreviation() {
+       /* String myString = switch (toAbbreviate) {
             case WHOLE: yield "W";
             case HALF: yield "H";
             case QUARTER: yield "Q";
             default: throw new IllegalArgumentException("Unknown note: " + toAbbreviate);
         };
-        return myString;
+        return myString; */
+        return abbreviation;
     }
 }
 
